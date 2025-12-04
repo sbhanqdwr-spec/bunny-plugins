@@ -1,7 +1,7 @@
 import { getAssetIDByName } from "@vendetta/ui/assets"
 import { React, ReactNative, stylesheet, constants, NavigationNative, url } from "@vendetta/metro/common"
 import { semanticColors } from "@vendetta/ui"
-import { Forms } from "@vendetta/ui/components"
+import { Forms, Search } from "@vendetta/ui/components"
 import { manifest } from "@vendetta/plugin"
 import { useProxy } from "@vendetta/storage"
 
@@ -28,8 +28,22 @@ export default () => {
     const navigation = NavigationNative.useNavigation()
     useProxy(settings)
 
+    const [apiKey, setApiKey] = React.useState(settings.apiKey ?? "")
+
     return (
         <ScrollView>
+
+            {/* 🔑 إدخال OpenAI API Key */}
+            <Search
+                style={{ padding: 15 }}
+                placeholder="OpenAI API Key (sk-...)"
+                value={apiKey}
+                onChangeText={(text: string) => {
+                    setApiKey(text)
+                    settings.apiKey = text
+                }}
+            />
+
             <FormRow
                 label={"Translate to"}
                 subLabel={settings.target_lang?.toLowerCase()}
@@ -42,7 +56,7 @@ export default () => {
             />
             <FormRow
                 label={"Translator"}
-                subLabel={settings.translator ? "Google Translate" : "DeepL"}
+                subLabel={settings.translator ? "ChatGPT" : "DeepL"}
                 leading={<FormRow.Icon source={getAssetIDByName("ic_locale_24px")} />}
                 trailing={() => <FormRow.Arrow />}
                 onPress={() => navigation.push("VendettaCustomPage", {
