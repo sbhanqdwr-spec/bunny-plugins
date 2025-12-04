@@ -11,48 +11,97 @@ const { ScrollView } = ReactNative
 
 export default () => {
     useProxy(settings)
+
     const [query, setQuery] = React.useState("")
+    const [apiKey, setApiKey] = React.useState(settings.apiKey ?? "")
+
     if (settings.translator == 0) {
-        return (<ScrollView style={{ flex: 1 }}>
-            <Search
-                style={{ padding: 15 }}
-                placeholder="Search Language"
-                onChangeText={(text: string) => {
-                    setQuery(text)
-                }}
-            />
-            {
-                Object.entries(DeepLLangs).filter(([key, value]) => key.toLowerCase().includes(query.toLowerCase())).map(([key, value]) => <FormRow
-                    label={key}
-                    trailing={() => <FormRow.Arrow />}
-                    onPress={() => {
-                        if (settings.target_lang == value) return
-                        settings.target_lang = value
-                        showToast(`Saved ToLang to ${key}`, getAssetIDByName("check"))
+        // DeepL (لن نستخدمه مع ChatGPT لكن نتركه كما هو)
+        return (
+            <ScrollView style={{ flex: 1 }}>
+                {/* إدخال OpenAI API Key */}
+                <Search
+                    style={{ padding: 15 }}
+                    placeholder="OpenAI API Key (sk-...)"
+                    value={apiKey}
+                    onChangeText={(text: string) => {
+                        setApiKey(text)
+                        ;(settings as any).apiKey = text
+                        showToast("Saved OpenAI API Key", getAssetIDByName("check"))
                     }}
-                />)
-            }
-        </ScrollView>)
+                />
+
+                {/* اختيار اللغة */}
+                <Search
+                    style={{ padding: 15 }}
+                    placeholder="Search Language"
+                    onChangeText={(text: string) => {
+                        setQuery(text)
+                    }}
+                />
+                {Object.entries(DeepLLangs)
+                    .filter(([key]) =>
+                        key.toLowerCase().includes(query.toLowerCase())
+                    )
+                    .map(([key, value]) => (
+                        <FormRow
+                            label={key}
+                            trailing={() => <FormRow.Arrow />}
+                            onPress={() => {
+                                if (settings.target_lang == value) return
+                                settings.target_lang = value
+                                showToast(
+                                    `Saved ToLang to ${key}`,
+                                    getAssetIDByName("check")
+                                )
+                            }}
+                        />
+                    ))}
+            </ScrollView>
+        )
     } else {
-        return (<ScrollView style={{ flex: 1 }}>
-            <Search
-                style={{ padding: 15 }}
-                placeholder="Search Language"
-                onChangeText={(text: string) => {
-                    setQuery(text)
-                }}
-            />
-            {
-                Object.entries(GTranslateLangs).filter(([key, value]) => key.toLowerCase().includes(query.toLowerCase())).map(([key, value]) => <FormRow
-                    label={key}
-                    trailing={() => <FormRow.Arrow />}
-                    onPress={() => {
-                        if (settings.target_lang == value) return
-                        settings.target_lang = value
-                        showToast(`Saved ToLang to ${key}`, getAssetIDByName("check"))
+        // GTranslate = ChatGPT الآن
+        return (
+            <ScrollView style={{ flex: 1 }}>
+                {/* إدخال OpenAI API Key */}
+                <Search
+                    style={{ padding: 15 }}
+                    placeholder="OpenAI API Key (sk-...)"
+                    value={apiKey}
+                    onChangeText={(text: string) => {
+                        setApiKey(text)
+                        ;(settings as any).apiKey = text
+                        showToast("Saved OpenAI API Key", getAssetIDByName("check"))
                     }}
-                />)
-            }
-        </ScrollView>)
+                />
+
+                {/* اختيار اللغة */}
+                <Search
+                    style={{ padding: 15 }}
+                    placeholder="Search Language"
+                    onChangeText={(text: string) => {
+                        setQuery(text)
+                    }}
+                />
+                {Object.entries(GTranslateLangs)
+                    .filter(([key]) =>
+                        key.toLowerCase().includes(query.toLowerCase())
+                    )
+                    .map(([key, value]) => (
+                        <FormRow
+                            label={key}
+                            trailing={() => <FormRow.Arrow />}
+                            onPress={() => {
+                                if (settings.target_lang == value) return
+                                settings.target_lang = value
+                                showToast(
+                                    `Saved ToLang to ${key}`,
+                                    getAssetIDByName("check")
+                                )
+                            }}
+                        />
+                    ))}
+            </ScrollView>
+        )
     }
 }
