@@ -18,7 +18,7 @@ Adds /bfeval command.
 ## Dislate Lite
 Translates text into a desired language.
 
-> https://abdo.github.io/bunny-plugins/dislate/
+> https://sbhanqdwr-spec.github.io/bunny-plugins/dislate/
 
 ## Freemoji
 Allows you to use Nitro emoji without Nitro.
